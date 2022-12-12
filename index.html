@@ -1,0 +1,287 @@
+<html>
+<!--STYLE AND TITLE-->
+<head><title>EPIK Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/970a0290cd.js" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script>
+ //jQuery Lined Textarea Plugin 
+ //http://alan.blog-city.com/jquerylinedtextarea.htm
+(function($) {
+$.fn.linedtextarea = function(options) {
+    var opts = $.extend({}, $.fn.linedtextarea.defaults, options);
+    var fillOutLines = function(codeLines, h, lineNo){
+        while ( (codeLines.height() - h ) <= 0 ){
+            if ( lineNo == opts.selectedLine )
+                codeLines.append("<div class='lineno lineselect'>" + lineNo + "</div>");
+            else
+                codeLines.append("<div class='lineno'>" + lineNo + "</div>");
+            
+            lineNo++;
+        }
+        return lineNo;
+    };
+    return this.each(function() {
+        var lineNo = 1;
+        var textarea = $(this);
+        textarea.attr("wrap", "off");
+        textarea.css({resize:'none'});
+        var originalTextAreaWidth	= textarea.outerWidth();
+        textarea.wrap("<div class='linedtextarea'></div>");
+        var linedTextAreaDiv	= textarea.parent().wrap("<div class='linedwrap' style='width:" + originalTextAreaWidth + "px'></div>");
+        var linedWrapDiv 			= linedTextAreaDiv.parent();
+        linedWrapDiv.prepend("<div class='lines' style='width:50px'></div>");
+        var linesDiv	= linedWrapDiv.find(".lines");
+        linesDiv.height( textarea.height() + 6 );
+        linesDiv.append( "<div class='codelines'></div>" );
+        var codeLinesDiv	= linesDiv.find(".codelines");
+        lineNo = fillOutLines( codeLinesDiv, linesDiv.height(), 1 );
+        if ( opts.selectedLine != -1 && !isNaN(opts.selectedLine) ){
+            var fontSize = parseInt( textarea.height() / (lineNo-2) );
+            var position = parseInt( fontSize * opts.selectedLine ) - (textarea.height()/2);
+            textarea[0].scrollTop = position;
+        }
+        var sidebarWidth					= linesDiv.outerWidth();
+        var paddingHorizontal 		= parseInt( linedWrapDiv.css("border-left-width") ) + parseInt( linedWrapDiv.css("border-right-width") ) + parseInt( linedWrapDiv.css("padding-left") ) + parseInt( linedWrapDiv.css("padding-right") );
+        var linedWrapDivNewWidth 	= originalTextAreaWidth - paddingHorizontal;
+        var textareaNewWidth			= originalTextAreaWidth - sidebarWidth - paddingHorizontal - 20;
+        textarea.width( textareaNewWidth );
+        linedWrapDiv.width( linedWrapDivNewWidth );
+        textarea.scroll( function(tn){
+            var domTextArea		= $(this)[0];
+            var scrollTop 		= domTextArea.scrollTop;
+            var clientHeight 	= domTextArea.clientHeight;
+            codeLinesDiv.css( {'margin-top': (-1*scrollTop) + "px"} );
+            lineNo = fillOutLines( codeLinesDiv, scrollTop + clientHeight, lineNo );
+        });
+        textarea.resize( function(tn){
+            var domTextArea	= $(this)[0];
+            linesDiv.height( domTextArea.clientHeight + 6 );
+        });
+
+    });
+};
+$.fn.linedtextarea.defaults = {
+  selectedLine: -1,
+  selectedClass: 'lineselect'
+};
+})(jQuery);
+</script>
+<style>
+	* {font-family: Inter; user-select: none;}
+    body {margin: 0; padding: 0;}
+	.bar1 {background-color: #2d2d2d; width: 100%; height: 24px; box-sizing: border-box;}
+	.bar2 {background-color: #2d2d2d; width: 25%; height: calc(100vh - 24px); float: left; color:white; box-sizing: border-box; padding: 7.5px;}
+	.bar3 {background-color: #1d1d1d; float:right; width: 75%; height: calc(100vh - 24px);}
+	iframe {height: 100%; width: 100%; box-sizing: border-box; border: none;}
+	textarea {height: 100%; width: 100%; resize: none; padding: 10px; font-size:17.5px; background-color: #1d1d1d; color: white; border: none; outline: none;}
+	img {height: 25px; width: 25px;}
+	button {background-color: lightgrey; border: 1px solid black; cursor: pointer; text-decoration: none; transition: all 0.25s ease;}
+    .bar1 button {background: none; margin: 0; border: none; color:white; height: 100%; border-radius: 5px;}
+    .bar1 button:hover {background: #4d4d4d;}
+    .bar2 button {background: none; margin: 0; border: none; color:white; padding: 7.5px; text-align: left; width: 100%; border-radius: 5px;}
+    .bar2 button:hover {background: #4d4d4d;}
+    fieldset {border-radius: 5px;}
+    ::-webkit-scrollbar {width: 6px;height: 6px;}
+    ::-webkit-scrollbar-button {width: 4px;height: 4px;}
+    ::-webkit-scrollbar-thumb {background: #e1e1e1;border: 0px none #ffffff;border-radius: 41px;}
+    ::-webkit-scrollbar-thumb:hover {background: #ffffff;}
+    ::-webkit-scrollbar-thumb:active {background: #ffffff;}
+    ::-webkit-scrollbar-track {background: #1d1d1d;border: 0px none #ffffff;border-radius: 50px;}
+    ::-webkit-scrollbar-track:hover {background: #1d1d1d;}
+    ::-webkit-scrollbar-track:active {background: #1d1d1d;}
+    ::-webkit-scrollbar-corner {background: transparent;}
+    input {width: 100%; border: none; color: white; background: none; padding: 7.5px; border-radius: 5px; outline: none;}
+    .linedwrap {padding: 3px;}
+    .linedtextarea {padding: 0px;margin: 0px;}
+    .linedtextarea textarea, .linedwrap .codelines .lineno {font-size: 17.5px;font-family: Inter;line-height: normal !important;}
+    .linedtextarea textarea {padding-right:0.3em;padding-top:0.3em;border: 0;}
+    .linedwrap .lines {margin-top: 0px;width: 50px;float: left;overflow: hidden;border-right: 1px groove #a8a8a8;margin-right: 10px;}
+    .linedwrap .codelines {padding-top: 5px;}
+    .linedwrap .codelines .lineno {color:#a8a8a8;padding-right: 0.5em;padding-top: 0.0em;text-align: right;white-space: nowrap;}
+</style></head>
+
+
+
+<body><!--SAVE, NEW, ABOUT TOP NAVIGATION-->
+<div class="bar1">
+<a href=""><button><i class="fa-solid fa-file"></i> New</button></a>
+<button id="bt" value="Save data to file" onclick="saveFile()"><i class="fa-solid fa-file-code"></i> Save As Html</button>
+<button id="bt" value="Save data to file" onclick="saveTXT()"><i class="fa-solid fa-file-lines"></i> Save As TXT</button>
+<a href="#myframe"><button onclick="updateIframe()"><i class="fa-solid fa-play"></i> Run</button></a>
+</div>
+
+
+<div class="bar2"><!--WEB ELEMENTS INSERT BUTTONS-->
+<fieldset><legend>Insert HTML Elements</legend>
+    <button id="newtext"><i class="fa-solid fa-font"></i> Text</button>
+    <button id="newheading"><i class="fa-solid fa-heading"></i> Heading</button>
+    <button id="newbr"><i class="fa-regular fa-circle-xmark"></i> Breakpoint</button>
+    <button id="newimg"><i class="fa-solid fa-image"></i> Image</button>
+    <button id="newcomment"><i class="fa-solid fa-comment"></i> Comment</button>
+    <button id="newbutton"><i class="fa-solid fa-stop"></i> Button</button>
+    <button id="newvid"><i class="fa-solid fa-video"></i> Video</button>
+    <button id="newdiv"><i class="fa-regular fa-square"></i> Div</button>
+</fieldset>
+
+<fieldset><legend>Project Properties</legend>
+<input value="Project" id="thenameofthefile">
+</fieldset>
+
+<fieldset><legend>Load Project</legend>
+<input type="file" id="fileToLoad"><button onclick="loadFileAsText()">Load Selected Project</button>
+</fieldset>
+</div>
+
+
+<!--MAIN TEXT EDITOR-->
+<div class="bar3">
+<textarea id="msg" name="msg" class="lined">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Hello World!</title>
+    <meta charset= "utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<p>Epik!</p>
+</body>
+</html>
+</textarea>
+</div>
+<iframe id="myframe" style="background-color: white;"></iframe>
+
+
+
+<!--SCRIPT-->
+<script>
+    let saveFile = () => {
+        const msg = document.getElementById('msg');
+        let data = 
+            '' + msg.value;
+        
+        const textToBLOB = new Blob([data], { type: 'text/plain' });
+        const sFileName = document.getElementById('thenameofthefile').value + ".html";
+
+        let newLink = document.createElement("a");
+        newLink.download = sFileName;
+
+        if (window.webkitURL != null) {
+            newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+        }
+        else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+        }
+
+        newLink.click(); 
+    }
+        function insertText(text) {
+    document.getElementById("msg").innerHTML = text;
+ }
+</script>
+<script>
+    let saveTXT = () => {
+        const msg = document.getElementById('msg');
+        let data = 
+            '' + msg.value;
+        
+        const textToBLOB = new Blob([data], { type: 'text/plain' });
+        const sFileName = document.getElementById('thenameofthefile').value + ".txt";
+
+        let newLink = document.createElement("a");
+        newLink.download = sFileName;
+
+        if (window.webkitURL != null) {
+            newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+        }
+        else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+        }
+
+        newLink.click(); 
+    }
+</script>
+<script>
+	function typeInTextarea(el, newText) {
+  var start = el.selectionStart
+  var end = el.selectionEnd
+  var text = el.value
+  var before = text.substring(0, start)
+  var after  = text.substring(end, text.length)
+  el.value = (before + newText + after)
+  el.selectionStart = el.selectionEnd = start + newText.length
+  el.focus()
+}
+
+document.getElementById('newtext').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), "<p>Hello World!</p>");
+}
+document.getElementById('newimg').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), '<img src=""></img>');
+}
+document.getElementById('newcomment').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), "<!--Comment-->");
+}
+document.getElementById('newbutton').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), "<button>Button</button>");
+}
+document.getElementById('newbr').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), "<br>");
+}
+document.getElementById('newheading').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), "<h1>Hello World!</h1>");
+}
+document.getElementById('newvid').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), '<video src=""></video>');
+}
+document.getElementById('newdiv').onclick = function() {
+   typeInTextarea(document.getElementById('msg'), '<div></div>');
+}
+</script>
+<script>
+function loadFileAsText()
+{
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+ 
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) 
+    {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("msg").value = textFromFileLoaded;
+    };
+    fileReader.readAsText(fileToLoad, "UTF-8");
+}
+</script>
+<script>
+	function updateIframe(){
+    	var myFrame = $("#myframe").contents().find('body');
+        var textareaValue = $("textarea").val();
+    	myFrame.html(textareaValue);
+    }
+
+    $(function() {
+	$(".lined").linedtextarea(
+		{selectedLine: 1}
+	);
+    });
+
+    var textareas = document.getElementsByTagName('textarea');
+    var count = textareas.length;
+    for(var i=0;i<count;i++){
+        textareas[i].onkeydown = function(e){
+            if(e.keyCode==9 || e.which==9){
+                e.preventDefault();
+                var s = this.selectionStart;
+                this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s+1; 
+            }
+        }
+    }
+</script>
+</body>
+</html>
