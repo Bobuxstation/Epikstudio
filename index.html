@@ -70,18 +70,20 @@ $.fn.linedtextarea.defaults = {
 <style>
 	* {font-family: Inter; user-select: none;}
     body {margin: 0; padding: 0;}
-	.bar1 {background-color: #2d2d2d; width: 100%; height: 24px; box-sizing: border-box;}
-	.bar2 {background-color: #2d2d2d; width: 25%; height: calc(100vh - 24px); float: left; color:white; box-sizing: border-box; padding: 7.5px;}
-	.bar3 {background-color: #1d1d1d; float:right; width: 75%; height: calc(100vh - 24px);}
+	.bar1 {background-color: #2d2d2d; width: 100%; height: 55px; box-sizing: border-box; padding: 5px;}
+	.bar2 {background-color: #2d2d2d; width: 23%; height: calc(100vh - 55px); float: left; color:white; box-sizing: border-box; padding: 5px; font-weight: bold;}
+	.bar3 {background-color: #1d1d1d; float:right; width: 77%; height: calc(100vh - 55px);}
 	iframe {height: 100%; width: 100%; box-sizing: border-box; border: none;}
 	textarea {height: 100%; width: 100%; resize: none; padding: 10px; font-size:17.5px; background-color: #1d1d1d; color: white; border: none; outline: none;}
 	img {height: 25px; width: 25px;}
-	button {background-color: lightgrey; border: 1px solid black; cursor: pointer; text-decoration: none; transition: all 0.25s ease;}
-    .bar1 button {background: none; margin: 0; border: none; color:white; height: 100%; border-radius: 5px;}
+	button {font-weight: bold; background-color: lightgrey; padding: 12.5px; border: 1px solid black; cursor: pointer; text-decoration: none; transition: all 0.25s ease;}
+    .bar1 button {box-sizing: border-box; background: none; font-weight: bold; padding: 12.5px; border: none; color:white; height: 100%; border-radius: 5px;}
     .bar1 button:hover {background: #4d4d4d;}
+    .bar1 button:active {background: #3d3d3d;}
     .bar2 button {background: none; margin: 0; border: none; color:white; padding: 7.5px; text-align: left; width: 100%; border-radius: 5px;}
     .bar2 button:hover {background: #4d4d4d;}
-    fieldset {border-radius: 5px;}
+    .bar2 button:active {background: #3d3d3d;}
+    fieldset {border-radius: 5px; border: white solid 2px; margin-bottom: 5px;}
     ::-webkit-scrollbar {width: 6px;height: 6px;}
     ::-webkit-scrollbar-button {width: 4px;height: 4px;}
     ::-webkit-scrollbar-thumb {background: #e1e1e1;border: 0px none #ffffff;border-radius: 41px;}
@@ -91,7 +93,8 @@ $.fn.linedtextarea.defaults = {
     ::-webkit-scrollbar-track:hover {background: #1d1d1d;}
     ::-webkit-scrollbar-track:active {background: #1d1d1d;}
     ::-webkit-scrollbar-corner {background: transparent;}
-    input {width: 100%; border: none; color: white; background: none; padding: 7.5px; border-radius: 5px; outline: none;}
+    input {font-weight: bold; transition: all 0.25 ease; width: 100%; border: none; color: white; background: none; padding: 7.5px; border-radius: 5px; outline: none;}
+    input:focus {background-color: #4d4d4d; transition: all 0.25 ease;}
     .linedwrap {padding: 3px;}
     .linedtextarea {padding: 0px;margin: 0px;}
     .linedtextarea textarea, .linedwrap .codelines .lineno {font-size: 17.5px;font-family: Inter;line-height: normal !important;}
@@ -108,7 +111,7 @@ $.fn.linedtextarea.defaults = {
 <a href=""><button><i class="fa-solid fa-file"></i> New</button></a>
 <button id="bt" value="Save data to file" onclick="saveFile()"><i class="fa-solid fa-file-code"></i> Save As Html</button>
 <button id="bt" value="Save data to file" onclick="saveTXT()"><i class="fa-solid fa-file-lines"></i> Save As TXT</button>
-<a href="#myframe"><button onclick="updateIframe()"><i class="fa-solid fa-play"></i> Run</button></a>
+<a href="#myframe" style="float: right;"><button onclick="updateIframe()"><i class="fa-solid fa-play"></i> Preview</button></a>
 </div>
 
 
@@ -131,6 +134,7 @@ $.fn.linedtextarea.defaults = {
 <fieldset><legend>Load Project</legend>
 <input type="file" id="fileToLoad"><button onclick="loadFileAsText()">Load Selected Project</button>
 </fieldset>
+<div style="bottom: 0; position: absolute; margin-bottom: 5px;"><button>Epikstudio V1.2</button></div>
 </div>
 
 
